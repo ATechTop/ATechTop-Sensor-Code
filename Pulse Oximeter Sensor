@@ -1,0 +1,93 @@
+volatile unsigned long cnt = 0;
+
+volatile unsigned long redcnt = 0;
+
+volatile unsigned long infcnt = 0;
+
+volatile unsigned long lwrcnt = 0;
+
+volatile unsigned long avgred = 0;
+
+volatile unsigned long avginf = 0;
+
+float oxy;
+
+unsigned long oldcnt = 0;
+
+unsigned long t = 0;
+
+unsigned long last;
+
+int redLED = 4;
+
+int infLED = 3;
+
+void count()
+
+{
+
+cnt++;
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+//
+
+// SETUP
+
+//
+
+void setup() 
+
+{
+
+  Serial.begin(57600);
+
+  Serial.println("START");
+
+  pinMode(2, INPUT);
+
+  digitalWrite(2, HIGH);
+
+  attachInterrupt(0, count, RISING);
+
+  pinMode(redLED, OUTPUT);
+
+  pinMode(infLED, OUTPUT);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+//
+
+// MAIN LOOP
+
+//
+
+void loop() 
+
+{
+
+  if (millis() - last >= 500){
+
+    lwrcnt++;
+
+    if ((lwrcnt % 2) == 0){
+
+      Serial.print("Freq INF LED ");
+
+      digitalWrite(infLED, LOW);
+
+      digitalWrite(redLED, HIGH);
+
+      redcnt++;
+
+    }
+
+    else {
+
+      Serial.print("Freq RED LED ");
+
+      digitalWrite(redLED, LOW);
