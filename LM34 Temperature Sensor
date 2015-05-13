@@ -1,0 +1,50 @@
+//initializes/defines the output pin of the LM34 temperature sensor
+int tempsenspin= A0;
+//this sets the ground pin to LOW and the input voltage pin to high
+int  fever=0;
+long lasttime=0;
+long newtime=0;
+long timefever=0;
+
+void setup()
+{
+Serial.begin(4800);
+}
+
+//main loop
+void loop()
+{
+int rawvoltage= analogRead(tempsenspin);
+float millivolts= (rawvoltage/1024.0) * 5;
+float fahrenheit= millivolts/10 + 10;
+Serial.print(fahrenheit);
+Serial.println(" degrees Fahrenheit ");
+
+//Parameters for Temperature Sensor
+ if (fahrenheit >= 100 && fahrenheit <= 103){
+   if (fever==1) {
+     newtime=millis();
+     timefever=newtime-lasttime;
+       if(timefever >= 5000){
+         {Serial.print("Child has slight fever.");
+          Serial.println();}}
+         else {}}
+         else {
+           fever=1;
+           lasttime=millis();}
+       }
+ else if (fahrenheit >= 104){
+   if(fever==1){
+     newtime=millis();
+     timefever=newtime-lasttime;
+     if(timefever>=5000){
+       Serial.print("System Alert: Child has a high fever!");
+       Serial.println();}
+     else{}}
+    else {fever=1;
+    lasttime=millis();}
+ }
+ else {fever=0;
+ Serial.println();}
+delay(2000); 
+}
